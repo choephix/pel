@@ -50,7 +50,7 @@ const app = new Elysia()
   .get('/favicon.ico', () => {
     return new Response(null, { status: 204 });
   })
-  .get('/:filename', async req => {
+  .get('/*', async req => {
     const ip = req.query.ip_override || req.ip;
     const referrer = req.headers['referer'] || 'Direct';
 
@@ -62,7 +62,9 @@ const app = new Elysia()
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n');
 
-    const pelFileName = req.params['filename'];
+    const pelFileName = req.path;
+
+    console.log(pelFileName);
 
     const analyticsData = {
       timestamp: new Date(),
