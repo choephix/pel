@@ -1,12 +1,15 @@
 {
-  "name": "pel",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "app",
+  "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
 }
