@@ -21,7 +21,28 @@ async function getIpInfo(ip: string) {
 }
 
 const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
-console.log(NOCODB_API_TOKEN);
+async function postAnalyticsData(data: any) {
+  try {
+    if (!NOCODB_API_TOKEN) {
+      throw new Error('No NOCODB_API_TOKEN environment variable found.');
+    }
+
+    const table_id = 'm5kw3rj86rdectu';
+    const response = await fetch(`https://nocodb.prj.cx/api/v2/tables/${table_id}/records`, {
+      method: 'POST',
+      headers: { 'xc-token': NOCODB_API_TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error posting data to NocoDB: ${response.statusText}`);
+    }
+
+    await response.json();
+  } catch (error) {
+    console.error('Error posting data to NocoDB:', error);
+  }
+}
 
 const app = new Elysia()
   .use(ip())
@@ -60,7 +81,7 @@ const app = new Elysia()
       pelFileName,
     };
 
-    console.log(analyticsData);
+    await postAnalyticsData(analyticsData);
 
     return new Response(onePixelBuffer, { headers: onePixelHeaders });
   })
