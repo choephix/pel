@@ -47,6 +47,9 @@ async function postAnalyticsData(data: any) {
 const app = new Elysia()
   .use(ip())
   .get('/', () => 'Hello Elysia')
+  .get('/favicon.ico', () => {
+    return new Response(null, { status: 204 });
+  })
   .get('/:filename', async req => {
     const ip = req.query.ip_override || req.ip;
     const referrer = req.headers['referer'] || 'Direct';
