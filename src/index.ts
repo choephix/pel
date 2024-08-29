@@ -20,10 +20,13 @@ async function getIpInfo(ip: string) {
   }
 }
 
+const NOCODB_API_TOKEN = process.env.NOCODB_API_TOKEN;
+console.log(NOCODB_API_TOKEN);
+
 const app = new Elysia()
   .use(ip())
   .get('/', () => 'Hello Elysia')
-  .get('/:filename(*.gif)', async req => {
+  .get('/:filename', async req => {
     const ip = req.query.ip_override || req.ip;
     const referrer = req.headers['referer'] || 'Direct';
 
@@ -34,6 +37,8 @@ const app = new Elysia()
     const headersString = Object.entries(req.headers)
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n');
+
+    const pelFileName = req.params['filename'];
 
     const analyticsData = {
       timestamp: new Date(),
@@ -52,6 +57,7 @@ const app = new Elysia()
       referrer: referrer,
       headers: headersString,
       ...ipInfo,
+      pelFileName,
     };
 
     console.log(analyticsData);
