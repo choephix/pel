@@ -2,7 +2,7 @@
   "name": "app",
   "version": "1.0.50",
   "scripts": {
-    "dev": "bun run --watch src/index.ts"
+    "dev": "PORT=2600; bun run --watch src/index.ts"
   },
   "dependencies": {
     "@types/ua-parser-js": "^0.7.39",
