@@ -11,16 +11,25 @@ const onePixelHeaders = {
   'Content-Length': onePixelBuffer.length.toString(),
 };
 
+async function getIpInfo(ip: string) {
+  const response = await fetch(`http://ip-api.com/json/${ip}`);
+  return await response.json();
+}
+
 const app = new Elysia()
   .use(ip())
   .get('/', () => 'Hello Elysia')
-  .get('/pixel.gif', req => {
+  .get('/pixel.gif',async req => {
     const ip = req.ip;
     const referrer = req.headers['referer'] || 'Direct';
 
     const ua = new UAParser(req.headers['user-agent']);
 
-    const headersString = Object.entries(req.headers).map(([key, value]) => `${key}: ${value}`).join('\n');
+    const ipInfo = await getIpInfo(ip);
+
+    const headersString = Object.entries(req.headers)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n');
 
     const analyticsData = {
       timestamp: new Date(),
@@ -38,6 +47,7 @@ const app = new Elysia()
       cpuArchitecture: ua.getCPU().architecture,
       referrer: referrer,
       headers: headersString,
+      ...ipInfo,
     };
 
     console.log(analyticsData);
