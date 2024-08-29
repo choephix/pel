@@ -12,15 +12,19 @@ const onePixelHeaders = {
 };
 
 async function getIpInfo(ip: string) {
-  const response = await fetch(`http://ip-api.com/json/${ip}`);
-  return await response.json();
+  try {
+    const response = await fetch(`http://ip-api.com/json/${ip}`);
+    return await response.json();
+  } catch (error) {
+    return { ipInfoError: String(error) };
+  }
 }
 
 const app = new Elysia()
   .use(ip())
   .get('/', () => 'Hello Elysia')
-  .get('/pixel.gif',async req => {
-    const ip = req.ip;
+  .get('/:filename(*.gif)', async req => {
+    const ip = req.query.ip_override || req.ip;
     const referrer = req.headers['referer'] || 'Direct';
 
     const ua = new UAParser(req.headers['user-agent']);

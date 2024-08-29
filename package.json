@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "pel",
   "version": "1.0.50",
   "scripts": {
     "dev": "PORT=2600; bun run --watch src/index.ts"
@@ -13,5 +13,5 @@
   "devDependencies": {
     "bun-types": "latest"
   },
-  "module": "src/index.js"
+  "module": "src/index.ts"
 }
